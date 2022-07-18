@@ -1,9 +1,7 @@
 package entidade;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Vector;
 import persistencia.BD;
 
 public class Solo {
@@ -21,6 +19,10 @@ public class Solo {
         this.campeao = campeao;
         this.principal = principal;
     }
+    // TODO: 
+    /*public static Solo buscarSolo(String nome){
+       
+    }*/
     public static String inserirCliente(Solo solo) {
         String sql = "INSERT INTO solo (Nome, Sexo, Principal,Campeao)"
                 + " VALUES (?,?,?,?)";

@@ -9,7 +9,7 @@ public class Janela extends javax.swing.JFrame {
      * Creates new form Janela
      */
     public Janela() {
-        BD.criaConexão();
+        BD.initiateDatabase();
         initComponents();
     }
 
