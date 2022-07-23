@@ -2,8 +2,14 @@
 package persistencia;
 
 import java.io.BufferedReader;
+
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,18 +20,17 @@ import java.sql.Statement;
 public class BD {
 
     static final String URL_SERVER = "jdbc:mysql://localhost:3306/";
-    static final String URL_DATABASE = "jdbc:mysql://localhost:3306/wrestlers";
     static final String USER = "root";
-    static final String PASSWORD = null;
-    public static Connection conexão = null;
-    private static Statement comando = null;
+    static final String PASSWORD = "1234";
+    private static Connection connection = null;
+    private static Statement comand = null;
     private static String sql;
     private static final String SQLFILE = "database.txt";
-    public static final String SQLCOMMANDS = "commandsSQL.txt";
+    private static final String SQLCOMMANDS = "commandsSQL.txt";
     
-    public static void initiateDatabase(){
+    public static void initiateDatabase() throws IOException{
         serverConnection();
-        if(bancodedadosExiste()){
+        if(hasDB()){
            fechaConexão();
            databaseConnection();
         }
@@ -33,35 +38,82 @@ public class BD {
             createDatabase();
         }
     }
-    public static void serverConnection() {
+   
+    private static void serverConnection() throws IOException {
         try {
-            conexão = DriverManager.getConnection(URL_SERVER, USER, PASSWORD);
+            connection = DriverManager.getConnection(URL_SERVER, USER, PASSWORD);
         } catch (SQLException exceção_sql) {
+            if(createLogs()){
+                writeLogs(exceção_sql.getMessage());
+            }
         }
     }
-    public static void databaseConnection(){
+    private static boolean createLogs(){
+        String logs = "Logs";
+        Path path = Paths.get(logs);
+        if(!Files.exists(path)){
+            try{
+                Files.createDirectory(path);
+                logs += "/Erros.txt";
+                PrintWriter file = new PrintWriter(logs);
+                file.close();
+            }catch (IOException error){
+                return false;
+            }
+        }
+        else{
+            return true;
+        }
+        return true;
+    }
+    private static void writeLogs(String error) throws IOException{
+        FileWriter file = new FileWriter("Logs/Erros.txt",true);
+        file.write(error);
+        file.close();
+    }
+    private static boolean hasDB() throws IOException{
+       try{
+            ResultSet result_list = connection.getMetaData().getCatalogs();
+            while (result_list.next()) {
+                String databaseName = result_list.getString(1);
+                if(databaseName.equals("wrestlers")){
+                    return true;
+                }
+            }
+            result_list.close();
+        } catch(Exception e){
+            if(createLogs()){
+               writeLogs(e.getMessage());
+            }
+        }
+       return false;
+   }
+    private static void databaseConnection() throws IOException{
+        String urlDatabase = URL_SERVER + "wrestlers";
         try {
-            conexão = DriverManager.getConnection(URL_DATABASE, USER, PASSWORD);
+            connection = DriverManager.getConnection(urlDatabase, USER, PASSWORD);
         } catch (SQLException exceção_sql) {
-            exceção_sql.printStackTrace();
+            if(createLogs()){
+               writeLogs(exceção_sql.getMessage());
+            }
         }
     }
-    
-    public static void fechaConexão() {
+    public static void fechaConexão() throws IOException {
         try {
-            conexão.close();
-        } catch (SQLException exceção_sql) {
-            exceção_sql.printStackTrace();
+            connection.close();
+        } catch (SQLException e) {
+            if(createLogs()){
+               writeLogs(e.getMessage());
+            }
         }
     }
-    
-   public static void createDatabase(){
+    private static void createDatabase() throws IOException{
        try {
             FileReader arq = new FileReader(SQLFILE);
             BufferedReader lerArq = new BufferedReader(arq);
             String linha = lerArq.readLine();
             sql = linha;
-            updateStatement(sql); //CREATE SCHEMA
+            executeStatement(sql); //CREATE SCHEMA
             fechaConexão();
             databaseConnection();
             linha = lerArq.readLine();
@@ -73,7 +125,7 @@ public class BD {
                 }
                 sql += linha;
             }
-            updateStatement(sql); //CREATE TABLE
+            executeStatement(sql); //CREATE TABLE
             linha = lerArq.readLine();
             sql = linha;
             while (linha != null) {
@@ -83,7 +135,7 @@ public class BD {
                 }
                 sql += linha;
             }
-            updateStatement(sql); //CREATE TABLE
+            executeStatement(sql); //CREATE TABLE
             linha = lerArq.readLine();
             sql = linha;
             while (linha != null) {
@@ -95,42 +147,52 @@ public class BD {
             }
             executeStatement(sql); // ALTER TABLE
             arq.close();
-        } catch (IOException error) {
-                System.err.printf("Erro na abertura do arquivo: %s.\n",
-                error.getMessage());
+        } catch (IOException e) {
+            if(createLogs()){
+                writeLogs(e.getMessage());
             }
-   }
-   private static void updateStatement(String sql){
-       try {
-           comando = conexão.createStatement();
-           comando.executeUpdate(sql);
-           comando.close();
-        } catch (SQLException e){
-            e.printStackTrace();
         }
    }
-   private static void executeStatement(String sql){
-       try {
-           comando = conexão.createStatement();
-           comando.execute(sql);
-           comando.close();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-   }
-   private static boolean bancodedadosExiste(){
-       try{
-            ResultSet lista_resultados = conexão.getMetaData().getCatalogs();
-            while (lista_resultados.next()) {
-                String databaseName = lista_resultados.getString(1);
-                if(databaseName.equals("wrestlers")){
-                    return true;
-                }
+    public static String createStatement(String info, int index) throws IOException{
+        String linha = null;
+        try{
+            FileReader arq = new FileReader(SQLCOMMANDS);
+            BufferedReader lerArq = new BufferedReader(arq);
+            for (int i = 0; i <index ; i++){
+                lerArq.readLine();
             }
-            lista_resultados.close();
-        } catch(Exception e){
-            e.printStackTrace();
+            linha = lerArq.readLine();
+            linha += info;
+        } catch(IOException e){
+            if(createLogs()){
+                writeLogs(e.getMessage());
+            }
         }
-       return false;
+        return linha;
+    }
+    public static void executeStatement(String sql) throws IOException{
+       try {
+           comand = connection.createStatement();
+           comand.executeUpdate(sql);
+           comand.close();
+        } catch (SQLException e){
+            if(createLogs()){
+                writeLogs(e.getMessage());
+            }
+        }
    }
+    public static ResultSet queryStatement(String sql) throws IOException{
+        ResultSet result_list = null;
+        try {
+           comand = connection.createStatement();
+           result_list = comand.executeQuery(sql);
+           comand.close();
+        } catch (SQLException e){
+            if(createLogs()){
+                writeLogs(e.getMessage());
+            }
+        }
+        return result_list;
+    }
+  
 }

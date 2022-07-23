@@ -1,6 +1,6 @@
 package entidade;
 
-import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import persistencia.BD;
 
@@ -21,13 +21,15 @@ public class Solo {
     }
     // TODO: 
     /*public static Solo buscarSolo(String nome){
-       
+        String 
+        ResultSet result_list = BD.queryStatement(nome);
     }*/
-    public static String inserirCliente(Solo solo) {
-        String sql = "INSERT INTO solo (Nome, Sexo, Principal,Campeao)"
+    //public static void inserirCliente(Solo solo) {
+        
+        /*String sql = "INSERT INTO solo (Nome, Sexo, Principal,Campeao)"
                 + " VALUES (?,?,?,?)";
         try {
-            PreparedStatement comando = BD.conexão.prepareStatement(sql);
+            PreparedStatement comando = BD.connection.prepareStatement(sql);
             comando.setString(1, solo.getNome());
             comando.setString(2, solo.getSexo());
             comando.setBoolean(3, solo.isPrincipal());
@@ -38,8 +40,8 @@ public class Solo {
         } catch (SQLException exceção_sql) {
             exceção_sql.printStackTrace();
             return "Erro na Inserção do Cliente no BD";
-        }
-    }
+        }*/
+    //}
 
     private String getNome() {
          return nome;

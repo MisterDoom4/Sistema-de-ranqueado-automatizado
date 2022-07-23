@@ -2,13 +2,18 @@ package interfaces;
 
 import persistencia.BD;
 import controle.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Janela extends javax.swing.JFrame {
 
     /**
      * Creates new form Janela
+     * @throws java.io.FileNotFoundException
      */
-    public Janela() {
+    public Janela() throws FileNotFoundException, IOException {
         BD.initiateDatabase();
         initComponents();
     }
@@ -153,7 +158,11 @@ public class Janela extends javax.swing.JFrame {
     }//GEN-LAST:event_SoloInserirRemoverMenuItemActionPerformed
 
     private void terminarSistema(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_terminarSistema
-        BD.fechaConexão();
+        try {
+            BD.fechaConexão();
+        } catch (IOException ex) {
+            Logger.getLogger(Janela.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.exit(1);
     }//GEN-LAST:event_terminarSistema
 
@@ -187,7 +196,13 @@ public class Janela extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Janela().setVisible(true);
+                try {
+                    new Janela().setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Janela.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Janela.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
