@@ -1,5 +1,6 @@
 package entidade;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import persistencia.BD;
@@ -19,28 +20,30 @@ public class Solo {
         this.campeao = campeao;
         this.principal = principal;
     }
-    // TODO: 
-    /*public static Solo buscarSolo(String nome){
-        String 
-        ResultSet result_list = BD.queryStatement(nome);
-    }*/
+    
+    public static Solo buscarSolo(String nome) throws IOException{
+        Solo solo = null;
+        String commandSQL = BD.createStatement(nome, 0);
+        ResultSet result_list = BD.queryStatement(commandSQL);
+        try{
+            while (result_list.next()){
+                solo = new Solo (nome,
+                                result_list.getString("Sexo"),
+                                result_list.getInt("Pontos"),
+                                result_list.getBoolean("Campeao"),
+                                result_list.getBoolean("Principal"));
+            }
+        }catch (SQLException e){
+             if(BD.createLogs()){
+               BD.writeLogs(e.getMessage());
+            }
+        }
+        return solo;
+    }
+    //TODO:
     //public static void inserirCliente(Solo solo) {
         
-        /*String sql = "INSERT INTO solo (Nome, Sexo, Principal,Campeao)"
-                + " VALUES (?,?,?,?)";
-        try {
-            PreparedStatement comando = BD.connection.prepareStatement(sql);
-            comando.setString(1, solo.getNome());
-            comando.setString(2, solo.getSexo());
-            comando.setBoolean(3, solo.isPrincipal());
-            comando.setBoolean(4, solo.isCampeao());
-            comando.executeUpdate();
-            comando.close();
-            return null;
-        } catch (SQLException exceção_sql) {
-            exceção_sql.printStackTrace();
-            return "Erro na Inserção do Cliente no BD";
-        }*/
+        
     //}
 
     private String getNome() {

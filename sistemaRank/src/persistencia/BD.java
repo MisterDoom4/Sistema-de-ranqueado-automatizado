@@ -48,7 +48,7 @@ public class BD {
             }
         }
     }
-    private static boolean createLogs(){
+    public static boolean createLogs(){
         String logs = "Logs";
         Path path = Paths.get(logs);
         if(!Files.exists(path)){
@@ -66,7 +66,7 @@ public class BD {
         }
         return true;
     }
-    private static void writeLogs(String error) throws IOException{
+    public static void writeLogs(String error) throws IOException{
         FileWriter file = new FileWriter("Logs/Erros.txt",true);
         file.write(error);
         file.close();
