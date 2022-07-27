@@ -115,7 +115,7 @@ public class BD {
             BufferedReader lerArq = new BufferedReader(arq);
             String linha = lerArq.readLine();
             sql = linha;
-            executeStatement(sql); //CREATE SCHEMA
+            executeDBStatement(sql); //CREATE SCHEMA
             fechaConexão();
             databaseConnection();
             linha = lerArq.readLine();
@@ -127,7 +127,7 @@ public class BD {
                 }
                 sql += linha;
             }
-            executeStatement(sql); //CREATE TABLE
+            executeDBStatement(sql); //CREATE TABLE
             linha = lerArq.readLine();
             sql = linha;
             while (linha != null) {
@@ -137,7 +137,7 @@ public class BD {
                 }
                 sql += linha;
             }
-            executeStatement(sql); //CREATE TABLE
+            executeDBStatement(sql); //CREATE TABLE
             linha = lerArq.readLine();
             sql = linha;
             while (linha != null) {
@@ -147,7 +147,7 @@ public class BD {
                 }
                 sql += linha;
             }
-            executeStatement(sql); // ALTER TABLE
+            executeDBStatement(sql); // ALTER TABLE
             arq.close();
         } catch (IOException e) {
             if(createLogs()){
@@ -172,7 +172,7 @@ public class BD {
         }
         return linha;
     }
-    public static void executeStatement(String sql) throws IOException{
+    public static void executeDBStatement(String sql) throws IOException{
        try {
            comand = connection.createStatement();
            comand.executeUpdate(sql);
@@ -205,5 +205,35 @@ public class BD {
         }
         return object;
     }
-  
+    public static String executeStatement(String sql,String info) throws IOException{
+         try {
+           PreparedStatement statement = connection.prepareStatement(sql);
+           statement.setString(1,info);
+           statement.executeUpdate();
+           statement.close();
+           return null;
+        } catch (SQLException e){
+            if(createLogs()){
+                writeLogs(e.getMessage());
+            }
+            return "Erro no comando";
+        }
+    }
+    public static String insertStatement(String sql,String info[],boolean infoBoolean[]) throws IOException{
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,info[0]);
+            statement.setString(2,info[1]);
+            statement.setBoolean(3,infoBoolean[0]);
+            statement.setBoolean(4, infoBoolean[1]);
+            statement.executeUpdate();
+            statement.close();
+            return info[0];
+        }catch (SQLException e){
+            if(createLogs()){
+                writeLogs(e.getMessage());
+            }
+            return "Erro no comando";
+        }
+    }
 }

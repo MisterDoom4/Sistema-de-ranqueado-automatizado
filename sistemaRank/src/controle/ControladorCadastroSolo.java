@@ -26,6 +26,16 @@ public class ControladorCadastroSolo {
         }
         return new Solo(name,result[0],Integer.parseInt(result[1]),campeao,principal);
     }
+    public static String insertSolo(Solo solo) throws IOException{
+        String commandSQL = BD.createStatement(1);
+        boolean[] infoBoolean = {solo.isPrincipal(),solo.isCampeao()};
+        String[] info = {solo.getNome(), solo.getSexo()};
+        return BD.insertStatement(commandSQL, info, infoBoolean);
+    }
+    public static String deleteSolo(String name) throws IOException{
+        String commandSQL = BD.createStatement(9);
+        return BD.executeStatement(commandSQL,name);
+    }
     //TODO:
     /*public String inserirSolo(Solo solo){
         

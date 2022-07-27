@@ -20,16 +20,18 @@ public class Solo {
     }
     //pesquisar por nome : SELECT * FROM wrestlers.solo WHERE Nome LIKE 'John%'
     
-    public static Solo buscarSolo(String nome) throws IOException{
+    public static Solo buscarSolo(String name) throws IOException{
         Solo solo = null;
-        solo = ControladorCadastroSolo.selectSolo(nome);
+        solo = ControladorCadastroSolo.selectSolo(name);
         return solo;
     }
-    //TODO:
-    //public static void inserirCliente(Solo solo) {
+    public static String removerSolo(String name) throws IOException{
+        return ControladorCadastroSolo.deleteSolo(name);
+    }
+    public static String inserirCliente(Solo solo) throws IOException {
+        return ControladorCadastroSolo.insertSolo(solo);
         
-        
-    //}
+    }
 
     public String getNome() {
          return nome;
