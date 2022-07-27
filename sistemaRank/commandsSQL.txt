@@ -1,4 +1,4 @@
-SELECT Sexo, Principal, Campeao, Pontos, Dupla FROM solo WHERE Nome = 
+SELECT Sexo, Principal, Campeao, Pontos, Dupla FROM wrestlers.solo WHERE Nome = ?
 INSERT INTO solo (Nome, Sexo, Principal, Campeao) VALUES 
 UPDATE solo SET Pontos = 
 UPDATE solo SET Dupla =

@@ -1,9 +1,7 @@
 package entidade;
 
+import controle.ControladorCadastroSolo;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import persistencia.BD;
 
 public class Solo {
     private String nome;
@@ -20,24 +18,11 @@ public class Solo {
         this.campeao = campeao;
         this.principal = principal;
     }
+    //pesquisar por nome : SELECT * FROM wrestlers.solo WHERE Nome LIKE 'John%'
     
     public static Solo buscarSolo(String nome) throws IOException{
         Solo solo = null;
-        String commandSQL = BD.createStatement(nome, 0);
-        ResultSet result_list = BD.queryStatement(commandSQL);
-        try{
-            while (result_list.next()){
-                solo = new Solo (nome,
-                                result_list.getString("Sexo"),
-                                result_list.getInt("Pontos"),
-                                result_list.getBoolean("Campeao"),
-                                result_list.getBoolean("Principal"));
-            }
-        }catch (SQLException e){
-             if(BD.createLogs()){
-               BD.writeLogs(e.getMessage());
-            }
-        }
+        solo = ControladorCadastroSolo.selectSolo(nome);
         return solo;
     }
     //TODO:
@@ -46,34 +31,38 @@ public class Solo {
         
     //}
 
-    private String getNome() {
+    public String getNome() {
          return nome;
     }
 
-    private String getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
-    private boolean isPrincipal() {
+    public boolean isPrincipal() {
         return principal;
     }
 
-    private boolean isCampeao() {
+    public boolean isCampeao() {
         return campeao;
     }
-    private void setNome(String nome){
+    public int getPontos(){
+        return pontos;
+    }
+    public void setNome(String nome){
         this.nome = nome;
     }
-    private void setSexo(String sexo){
+    public void setSexo(String sexo){
         this.sexo = sexo;
     }
-    private void setPrincipal(boolean principal){
+    public void setPrincipal(boolean principal){
         this.principal = principal;
     }
-    private void setCampeao(boolean campeao){
+    public void setCampeao(boolean campeao){
         this.campeao = campeao;
     }
-    private void setPontos(int pontos){
+    public void setPontos(int pontos){
         this.pontos = pontos;
     }
+    
 }

@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,7 +26,7 @@ public class BD {
     private static Connection connection = null;
     private static Statement comand = null;
     private static String sql;
-    private static final String SQLFILE = "database.txt";
+    private static final String SQLFILE = "database.sql";
     private static final String SQLCOMMANDS = "commandsSQL.txt";
     
     public static void initiateDatabase() throws IOException{
@@ -77,6 +78,7 @@ public class BD {
             while (result_list.next()) {
                 String databaseName = result_list.getString(1);
                 if(databaseName.equals("wrestlers")){
+                    result_list.close();
                     return true;
                 }
             }
@@ -153,7 +155,7 @@ public class BD {
             }
         }
    }
-    public static String createStatement(String info, int index) throws IOException{
+    public static String createStatement(int index) throws IOException{
         String linha = null;
         try{
             FileReader arq = new FileReader(SQLCOMMANDS);
@@ -162,7 +164,7 @@ public class BD {
                 lerArq.readLine();
             }
             linha = lerArq.readLine();
-            linha += info;
+            arq.close();
         } catch(IOException e){
             if(createLogs()){
                 writeLogs(e.getMessage());
@@ -181,18 +183,27 @@ public class BD {
             }
         }
    }
-    public static ResultSet queryStatement(String sql) throws IOException{
+    public static String[] queryStatement(String sql,String info) throws IOException{ // so usar para comandos selects //
+        String[] object = new String[4];
         ResultSet result_list = null;
         try {
-           comand = connection.createStatement();
-           result_list = comand.executeQuery(sql);
-           comand.close();
+           PreparedStatement statement = connection.prepareStatement(sql);
+           statement.setString(1,info);
+           result_list = statement.executeQuery();
+           while(result_list.next()){
+               object[0] = result_list.getString("Sexo");
+               object[1] = ""+ result_list.getInt("Pontos");
+               object[2] = ""+ result_list.getBoolean("Campeao");
+               object[3] = ""+ result_list.getBoolean("Principal");
+           }
+           result_list.close();
+           statement.close();
         } catch (SQLException e){
             if(createLogs()){
                 writeLogs(e.getMessage());
             }
         }
-        return result_list;
+        return object;
     }
   
 }
