@@ -1,12 +1,9 @@
 SELECT Sexo, Principal, Campeao, Pontos, Dupla FROM solo WHERE Nome = ?
 INSERT INTO solo (Nome, Sexo, Principal, Campeao) VALUES (?,?,?,?)
-UPDATE solo SET Pontos = ?
-UPDATE solo SET Dupla = ?
-UPDATE solo SET Principal = ?
-UPDATE solo SET Campeao = ? 
-INSERT INTO dupla (Nome, Solo1, Solo2, Campeao) VALUES 
-UPDATE dupla SET Pontos = ? 
-UPDATE dupla SET Campeao = ? 
+UPDATE solo SET Sexo = ?, Principal = ?, Campeao = ?, Pontos = ? WHERE Nome = ?
+UPDATE solo SET Dupla = ? WHERE Nome = ?
+INSERT INTO dupla (Nome, Solo1, Solo2, Campeao) VALUES (?,?,?,?)
+UPDATE dupla SET Pontos = ?, SET Campeao = ? WHERE Nome = ?
 DELETE FROM solo WHERE Nome = ?
 DELETE FROM dupla WHERE Nome = ?
 

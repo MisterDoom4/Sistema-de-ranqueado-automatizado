@@ -20,7 +20,7 @@ public class Solo {
     }
     //pesquisar por nome : SELECT * FROM wrestlers.solo WHERE Nome LIKE 'John%'
     
-    public static Solo buscarSolo(String name) throws IOException{
+    public static Solo findSolo(String name) throws IOException{
         Solo solo = null;
         solo = ControladorCadastroSolo.selectSolo(name);
         return solo;
@@ -28,9 +28,13 @@ public class Solo {
     public static String removerSolo(String name) throws IOException{
         return ControladorCadastroSolo.deleteSolo(name);
     }
-    public static String inserirCliente(Solo solo) throws IOException {
+    public static String insertSolo(Solo solo) throws IOException {
         return ControladorCadastroSolo.insertSolo(solo);
         
+    }
+    public static Solo updateSolo(Solo solo) throws IOException{
+        String name = ControladorCadastroSolo.updateSolo(solo);
+        return findSolo(name);
     }
 
     public String getNome() {

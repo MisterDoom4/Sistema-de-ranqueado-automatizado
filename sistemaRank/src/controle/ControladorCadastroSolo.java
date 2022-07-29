@@ -33,13 +33,14 @@ public class ControladorCadastroSolo {
         return BD.insertStatement(commandSQL, info, infoBoolean);
     }
     public static String deleteSolo(String name) throws IOException{
-        String commandSQL = BD.createStatement(9);
-        return BD.executeStatement(commandSQL,name);
+        String commandSQL = BD.createStatement(6);
+        return BD.deleteStatement(commandSQL,name);
     }
-    //TODO:
-    /*public String inserirSolo(Solo solo){
-        
-        Solo solo1 = Solo.buscarSolo(solo.getNome());
-    }*/
+    public static String updateSolo(Solo solo) throws IOException{
+        String commandSQL = BD.createStatement(2);
+        boolean[] infoBoolean = {solo.isPrincipal(),solo.isCampeao()};
+        String[] info = {solo.getNome(), solo.getSexo()};
+        return BD.updateStatement(commandSQL, info, infoBoolean,solo.getPontos());
+    }
 
 }

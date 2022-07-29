@@ -205,7 +205,7 @@ public class BD {
         }
         return object;
     }
-    public static String executeStatement(String sql,String info) throws IOException{
+    public static String deleteStatement(String sql,String info) throws IOException{
          try {
            PreparedStatement statement = connection.prepareStatement(sql);
            statement.setString(1,info);
@@ -235,5 +235,24 @@ public class BD {
             }
             return "Erro no comando";
         }
+    }
+    public static String updateStatement(String sql,String info[],boolean infoBoolean[],int points ) throws IOException{
+         try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,info[1]);
+            statement.setBoolean(2,infoBoolean[0]);
+            statement.setBoolean(3, infoBoolean[1]);
+            statement.setInt(4, points);
+            statement.setString(5,info[0]);
+            statement.executeUpdate();
+            statement.close();
+            return info[0];
+        }catch (SQLException e){
+            if(createLogs()){
+                writeLogs(e.getMessage());
+            }
+            return "Erro no comando";
+        }
+        
     }
 }

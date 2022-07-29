@@ -19,6 +19,7 @@ public class JanelaSoloInserirRemover extends javax.swing.JFrame {
         sexField = new javax.swing.JTextField();
         championCheck = new javax.swing.JCheckBox();
         principalCheck = new javax.swing.JCheckBox();
+        pointsField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Inserir/Remover");
@@ -42,6 +43,8 @@ public class JanelaSoloInserirRemover extends javax.swing.JFrame {
 
         principalCheck.setText("Rank principal");
 
+        pointsField.setMinimumSize(new java.awt.Dimension(200, 220));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -56,7 +59,8 @@ public class JanelaSoloInserirRemover extends javax.swing.JFrame {
                         .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1))
-                    .addComponent(principalCheck))
+                    .addComponent(principalCheck)
+                    .addComponent(pointsField, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(76, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -71,10 +75,12 @@ public class JanelaSoloInserirRemover extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sexField, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pointsField, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(principalCheck)
                 .addGap(2, 2, 2)
                 .addComponent(championCheck)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         pack();
@@ -108,6 +114,7 @@ public class JanelaSoloInserirRemover extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField nameField;
+    private javax.swing.JTextField pointsField;
     private javax.swing.JCheckBox principalCheck;
     private javax.swing.JTextField sexField;
     // End of variables declaration//GEN-END:variables
@@ -115,8 +122,9 @@ public class JanelaSoloInserirRemover extends javax.swing.JFrame {
     private String getSoloSearch() throws IOException {
         String name = nameField.getText();
         String sexo = sexField.getText();
+        int points = Integer.parseInt(pointsField.getText());
         boolean principal = principalCheck.isSelected();
         boolean campeao = championCheck.isSelected();
-        return Solo.inserirCliente(new Solo(name,sexo,0,principal,campeao));
+        return ""+ Solo.updateSolo(new Solo(name,sexo,points,principal,campeao)).getPontos();
     }
 }

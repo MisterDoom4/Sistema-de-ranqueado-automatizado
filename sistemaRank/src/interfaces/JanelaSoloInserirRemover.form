@@ -40,6 +40,7 @@
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="principalCheck" min="-2" max="-2" attributes="0"/>
+                  <Component id="pointsField" min="-2" pref="85" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="76" max="32767" attributes="0"/>
           </Group>
@@ -58,10 +59,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="sexField" min="-2" pref="37" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="pointsField" min="-2" pref="37" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="principalCheck" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Component id="championCheck" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="104" max="32767" attributes="0"/>
+              <EmptySpace pref="61" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -102,6 +105,13 @@
     <Component class="javax.swing.JCheckBox" name="principalCheck">
       <Properties>
         <Property name="text" type="java.lang.String" value="Rank principal"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="pointsField">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[200, 220]"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>
