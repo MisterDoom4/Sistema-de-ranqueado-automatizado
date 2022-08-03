@@ -1,2 +1,2 @@
-# Sistema-de-ranqueado-automatizado
-Sistema feito em Java utilizando Banco de dados MySQL
+# Gerenciador de MYSQL em Java
+Programa para operar banco de dados utilizando MYSQL na linguagem Java
